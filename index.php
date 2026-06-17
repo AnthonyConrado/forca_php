@@ -1,7 +1,28 @@
 <?php
 session_start();
 
-$palavras = ["banana", "computador", "internet", "programacao", "php"];
+$palavras = [
+    "banana",
+    "computador",
+    "internet",
+    "programacao",
+    "php",
+    "teclado",
+    "mouse",
+    "servidor",
+    "browser",
+    "arquivo",
+    "janela",
+    "variavel",
+    "sistema",
+    "codigo",
+    "algoritmo",
+    "estrutura",
+    "dados",
+    "funcoes",
+    "desenvolvimento",
+    "terminal"
+];
 
 if (!isset($_SESSION['palavra'])) {
     $_SESSION['palavra'] = $palavras[array_rand($palavras)];
