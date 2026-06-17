@@ -7,6 +7,7 @@ if (!isset($_SESSION['palavra'])) {
     $_SESSION['palavra'] = $palavras[array_rand($palavras)];
     $_SESSION['letras'] = [];
     $_SESSION['erros'] = 0;
+    $_SESSION['mensagem'] = '';
 }
 
 if (isset($_POST['reiniciar'])) {
@@ -16,12 +17,20 @@ if (isset($_POST['reiniciar'])) {
 }
 
 if (isset($_POST['letra'])) {
-    $letra = strtolower($_POST['letra']);
-    if (!in_array($letra, $_SESSION['letras'])) {
+    $letra = strtolower(trim($_POST['letra']));
+
+    if (strlen($letra) !== 1 || !ctype_alpha($letra)) {
+        $_SESSION['mensagem'] = 'Digite apenas uma letra.';
+    } elseif (!in_array($letra, $_SESSION['letras'])) {
         $_SESSION['letras'][] = $letra;
         if (strpos($_SESSION['palavra'], $letra) === false) {
             $_SESSION['erros']++;
+            $_SESSION['mensagem'] = 'Letra errada.';
+        } else {
+            $_SESSION['mensagem'] = 'Letra certa.';
         }
+    } else {
+        $_SESSION['mensagem'] = 'Você já tentou essa letra.';
     }
 }
 
@@ -46,6 +55,10 @@ $perdeu = $_SESSION['erros'] >= 6;
 <h1>Jogo da Forca (PHP)</h1>
 <p><strong><?php echo $exibicao; ?></strong></p>
 <p>Erros: <?php echo $_SESSION['erros']; ?>/6</p>
+<p>Letras tentadas: <?php echo implode(', ', $_SESSION['letras']); ?></p>
+<?php if (!empty($_SESSION['mensagem'])): ?>
+<p><?php echo $_SESSION['mensagem']; ?></p>
+<?php endif; ?>
 
 <?php if (!$venceu && !$perdeu): ?>
 <form method="post">
